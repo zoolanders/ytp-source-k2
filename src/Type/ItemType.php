@@ -60,6 +60,53 @@ class ItemType
                     ],
                 ],
 
+                'image' => [
+                    'type' => 'String',
+                    'args' => [
+                        'size' => [
+                            'type' => 'String',
+                        ]
+                    ],
+                    'metadata' => [
+                        'label' => trans('Image'),
+                        'arguments' => [
+                            'size' => [
+                                'label' => trans('Size'),
+                                'description' => trans('Choose the preferred image size.'),
+                                'type' => 'select',
+                                'default' => '',
+                                'options' => [
+                                    trans('Default') => '',
+                                    trans('Extra Small') => 'XSmall',
+                                    trans('Small') => 'Small',
+                                    trans('Medium') => 'Medium',
+                                    trans('Large') => 'Large',
+                                    trans('Extra Large') => 'XLarge',
+                                ],
+                            ],
+                        ],
+                    ],
+                    'extensions' => [
+                        'call' => __CLASS__ . '::imageUrl',
+                    ],
+                ],
+
+                'image_caption' => [
+                    'type' => 'String',
+                    'metadata' => [
+                        'label' => trans('Image Caption'),
+                        'filters' => ['limit'],
+                    ],
+                ],
+
+                'image_credit' => [
+                    'type' => 'String',
+                    'metadata' => [
+                        'label' => trans('Image Credit'),
+                        'filters' => ['limit'],
+                    ],
+                ],
+
                 'Featured' => [
                     'type' => 'Boolean',
                     'metadata' => [
@@ -455,5 +502,11 @@ class ItemType
             Path::get('../../templates/meta'),
             compact('item', 'tags', 'args')
         );
+    }
+
+    public static function imageUrl($item, array $args): string
+    {
+        $image = "image{$args['size']}";
+        return $item->$image ?? '';
     }
 }
