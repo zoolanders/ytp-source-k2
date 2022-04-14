@@ -1,8 +1,10 @@
 # K2 Source for YOOtheme Pro
 
+A YOOtheme Pro Source for Joomla Component [K2](https://github.com/getk2/k2).
+
 ## Getting Started
 
-The K2 Source is a YOOtheme Pro module ready to be set in a Child Theme or wrapped into a plugin. Assuming the Child Theme is the prefered choice during development follow this simples steps for the first setup:
+The K2 Source is a YOOtheme Pro module ready to be set in a Child Theme or wrapped into a plugin. Assuming the Child Theme is the prefered choice follow these steps for the initial setup:
 
 1. Create a folder `yootheme_mytheme` or with a sufix of your choice.
 1. Enable the new Child Theme in the YOOtheme Pro Customizer `Advanced Settings`.
