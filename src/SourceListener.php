@@ -3,6 +3,7 @@
 namespace YOOtheme\Source\K2;
 
 use function YOOtheme\trans;
+use Joomla\CMS\Component\ComponentHelper;
 
 class SourceListener
 {
@@ -34,6 +35,11 @@ class SourceListener
         foreach (K2Helper::getExtraFieldsGroups() as $group) {
             $fields = K2Helper::getExtraFieldsByGroup($group->id);
             static::configFields($source, 'K2Item', $group, $fields);
+        }
+
+        if (ComponentHelper::getComponent('com_sigpro', true)->enabled) {
+            $source->objectType('K2Item', Type\GalleryType::config());
+            $source->objectType('K2GalleryItem', Type\GalleryItemType::config());
         }
     }
 

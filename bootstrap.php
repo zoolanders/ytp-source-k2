@@ -14,6 +14,8 @@ require_once __DIR__ . '/src/Type/CategoryType.php';
 require_once __DIR__ . '/src/Type/CategoryQueryType.php';
 require_once __DIR__ . '/src/Type/TagQueryType.php';
 require_once __DIR__ . '/src/Type/FieldsType.php';
+require_once __DIR__ . '/src/Type/GalleryType.php';
+require_once __DIR__ . '/src/Type/GalleryItemType.php';
 
 return [
 

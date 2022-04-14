@@ -84,4 +84,16 @@ class K2Helper
         $field->value = (object) (json_decode($field->value, true)[0] ?? []);
         $field->alias = $field->value->alias;
     }
+
+    public static function getSigProModelGallery()
+    {
+        require_once JPATH_SITE.'/administrator/components/com_sigpro/helper.php';
+        require_once JPATH_SITE.'/administrator/components/com_sigpro/models/model.php';
+        require_once JPATH_SITE.'/administrator/components/com_sigpro/models/gallery.php';
+
+        $model = new \SigProModelGallery();
+        $model->setState('type', 'k2');
+
+        return $model;
+    }
 }
