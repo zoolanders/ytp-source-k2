@@ -369,6 +369,15 @@ class ItemType
                     ],
                 ],
 
+                'attachments' => [
+                    'type' => [
+                        'listOf' => 'K2ItemAttachment',
+                    ],
+                    'metadata' => [
+                        'label' => trans('Attachments')
+                    ],
+                ],
+
                 'id' => [
                     'type' => 'Int',
                     'metadata' => [

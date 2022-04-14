@@ -12,6 +12,7 @@ class SourceListener
             ['K2Tag', Type\TagType::config()],
             ['K2Item', Type\ItemType::config()],
             ['K2ItemEvent', Type\ItemEventType::config()],
+            ['K2ItemAttachment', Type\ItemAttachmentType::config()],
             ['K2Category', Type\CategoryType::config()],
         ];
 
