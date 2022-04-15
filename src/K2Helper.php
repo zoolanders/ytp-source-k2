@@ -84,4 +84,18 @@ class K2Helper
         $field->value = (object) (json_decode($field->value, true)[0] ?? []);
         $field->alias = $field->value->alias;
     }
+
+    public static function getTags()
+    {
+        require_once JPATH_SITE.'/administrator/components/com_k2/models/tags.php';
+
+        return (new \K2ModelTags())->getData();
+    }
+
+    public static function getCategoriesTree()
+    {
+        require_once JPATH_SITE.'/administrator/components/com_k2/models/categories.php';
+
+        return (new \K2ModelCategories())->categoriesTree();
+    }
 }

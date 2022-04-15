@@ -2,11 +2,14 @@
 
 namespace YOOtheme\Source\K2;
 
+use function YOOtheme\trans;
+use Joomla\CMS\Document\Document;
 use YOOtheme\Config;
+use YOOtheme\Source\K2\K2Helper;
 
 class TemplateListener
 {
-    public static function matchTemplate($view)
+    public static function matchTemplate(Document $document, $view)
     {
         if (static::isView($view, 'item')) {
 
@@ -15,8 +18,9 @@ class TemplateListener
             return [
                 'type' => 'com_k2.item',
                 'query' => [
-                    // 'catid' => $item->getRelatedCategoryIds(true),
-                    // 'tag' => $item->getTags(),
+                    'catid' => $item->category->id,
+                    'tag' => array_column($item->tags, 'id'),
+                    'lang' => $document->language,
                 ],
                 'params' => [
                     'item' => $item,
@@ -95,19 +99,49 @@ class TemplateListener
 
     public static function initCustomizer(Config $config)
     {
+        $languageField = [
+            'label' => trans('Limit by Language'),
+            'type' => 'select',
+            'defaultIndex' => 0,
+            'options' => [['evaluate' => 'config.languages']],
+            'show' => '$customizer.languages[\'length\'] > 2 || lang',
+        ];
+
         $templates = [
 
             'com_k2.item' => [
-                'label' => 'Item',
+                'label' => trans('Single Item'),
                 'group' => 'K2',
                 'fieldset' => [
                     'default' => [
                         'fields' => [
-                            'my_field' => [
-                                'label' => 'My Field',
-                                'description' => 'My field description ...',
-                                'type' => 'text',
-                            ],
+                            'catid' => ($category = [
+                                'label' => trans('Limit by Categories'),
+                                'description' => trans(
+                                    'The template is only assigned to items from the selected categories. Items from child categories are not included. Use the <kbd>shift</kbd> or <kbd>ctrl/cmd</kbd> key to select multiple categories.'
+                                ),
+                                'type' => 'select',
+                                'default' => [],
+                                'options' => [['evaluate' => 'config.k2categories']],
+                                'attrs' => [
+                                    'multiple' => true,
+                                    'class' => 'uk-height-small',
+                                ],
+                            ]),
+                            'tag' => ($tag = [
+                                'label' => trans('Limit by Tags'),
+                                'description' => trans(
+                                    'The template is only assigned to item with the selected tags. Use the <kbd>shift</kbd> or <kbd>ctrl/cmd</kbd> key to select multiple tags.'
+                                ),
+                                'type' => 'select',
+                                'default' => [],
+                                'options' => [['evaluate' => 'config.k2tags']],
+                                'attrs' => [
+                                    'multiple' => true,
+                                    'class' => 'uk-height-small',
+                                ],
+                            ]),
+                            'lang' => $languageField,
                         ],
                     ],
                 ],
@@ -131,6 +165,20 @@ class TemplateListener
         ];
 
         $config->add('customizer.templates', $templates);
+
+        $config->add(
+            'customizer.k2tags',
+            array_map(function ($tag) {
+                return ['value' => (string) $tag->id, 'text' => $tag->name];
+            }, K2Helper::getTags())
+        );
+
+        $config->add(
+            'customizer.k2categories',
+            array_map(function ($cat) {
+                return ['value' => (string) $cat->value, 'text' => $cat->text];
+            }, K2Helper::getCategoriesTree())
+        );
     }
 
     protected static function isView($view, $task, $name = null)
