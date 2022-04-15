@@ -3,6 +3,7 @@
 namespace YOOtheme\Source\K2\Type;
 
 use function YOOtheme\trans;
+use YOOtheme\File;
 
 class GalleryType
 {
@@ -31,10 +32,14 @@ class GalleryType
         require_once JPATH_SITE.'/administrator/components/com_sigpro/models/model.php';
         require_once JPATH_SITE.'/administrator/components/com_sigpro/models/gallery.php';
 
-        $model = new \SigProModelGallery();
-        $model->setState('type', 'k2');
-        $model->setState('folder', $item->id);
+        if (File::exists(\SigProHelper::getPath('k2') . '/' . $item->id)) {
+            $model = new \SigProModelGallery();
+            $model->setState('type', 'k2');
+            $model->setState('folder', $item->id);
 
-        return $model->getData()->images ?? [];
+            return $model->getData()->images ?? [];
+        }
+
+        return [];
     }
 }
