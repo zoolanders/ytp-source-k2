@@ -22,6 +22,14 @@ class ItemType
                     ],
                 ],
 
+                'alias' => [
+                    'type' => 'String',
+                    'metadata' => [
+                        'label' => trans('Alias'),
+                        'filters' => ['limit'],
+                    ],
+                ],
+
                 'content' => [
                     'type' => 'String',
                     'metadata' => [
