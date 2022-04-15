@@ -74,9 +74,11 @@ class ItemType
                                 'label' => trans('Size'),
                                 'description' => trans('Choose the preferred image size.'),
                                 'type' => 'select',
-                                'default' => '',
+                                'default' => 'large',
                                 'options' => [
-                                    trans('Default') => '',
+                                    trans('Inherit Leading Size') => 'leadingImgSize',
+                                    trans('Inherit Primary Size') => 'primaryImgSize',
+                                    trans('Inherit Secondary Size') => 'secondaryImgSize',
                                     trans('Extra Small') => 'XSmall',
                                     trans('Small') => 'Small',
                                     trans('Medium') => 'Medium',
@@ -515,7 +517,16 @@ class ItemType
 
     public static function imageUrl($item, array $args): string
     {
-        $image = "image{$args['size']}";
-        return $item->$image ?? '';
+        $size = $args['size'] ?? '';
+
+        if ($inherited = $item->params->get($size)) {
+            $size = $inherited;
+        }
+
+        if (!in_array($size, ['XSmall', 'Small', 'Medium', 'Large', 'Xlarge'])) {
+            $size = 'Generic';
+        }
+
+        return $item->{"image{$size}"};
     }
 }
