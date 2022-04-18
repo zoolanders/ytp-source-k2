@@ -5,6 +5,7 @@ namespace YOOtheme\Source\K2\Type;
 use function YOOtheme\app;
 use function YOOtheme\trans;
 use Joomla\CMS\Factory;
+use YOOtheme\File;
 use YOOtheme\Path;
 use YOOtheme\View;
 
@@ -82,8 +83,9 @@ class ItemType
                                 'label' => trans('Size'),
                                 'description' => trans('Choose the preferred image size.'),
                                 'type' => 'select',
-                                'default' => 'large',
+                                'default' => '',
                                 'options' => [
+                                    trans('Default') => '',
                                     trans('Inherit Leading Size') => 'leadingImgSize',
                                     trans('Inherit Primary Size') => 'primaryImgSize',
                                     trans('Inherit Secondary Size') => 'secondaryImgSize',
@@ -526,6 +528,13 @@ class ItemType
     public static function imageUrl($item, array $args): string
     {
         $size = $args['size'] ?? '';
+
+        if (!$size) {
+            $ext = File::getExtension($item->image);
+            $image = $item->imageProperties->filenamePrefix;
+
+            return "/media/k2/items/src/$image.$ext";
+        }
 
         if ($inherited = $item->params->get($size)) {
             $size = $inherited;
