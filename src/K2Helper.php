@@ -4,6 +4,7 @@ namespace YOOtheme\Source\K2;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Table\Table;
+use Joomla\Registry\Registry;
 use YOOtheme\Path;
 
 require_once JPATH_SITE.'/administrator/components/com_k2/models/extrafield.php';
@@ -97,5 +98,14 @@ class K2Helper
         require_once JPATH_SITE.'/administrator/components/com_k2/models/categories.php';
 
         return (new \K2ModelCategories())->categoriesTree();
+    }
+
+    public static function getModalItems($params): ?array
+    {
+        require_once JPATH_SITE.'/modules/mod_k2_content/helper.php';
+
+        $params = new Registry($params);
+
+        return \modK2ContentHelper::getItems($params);
     }
 }

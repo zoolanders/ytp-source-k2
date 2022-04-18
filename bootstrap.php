@@ -17,6 +17,8 @@ require_once __DIR__ . '/src/Type/AuthorsQueryType.php';
 require_once __DIR__ . '/src/Type/FieldsType.php';
 require_once __DIR__ . '/src/Type/GalleryType.php';
 require_once __DIR__ . '/src/Type/GalleryItemType.php';
+require_once __DIR__ . '/src/Type/CustomItemQueryType.php';
+require_once __DIR__ . '/src/Type/CustomItemsQueryType.php';
 
 return [
 

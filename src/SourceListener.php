@@ -23,6 +23,8 @@ class SourceListener
             Type\ItemsQueryType::config(),
             Type\AuthorsQueryType::config(),
             Type\CategoriesQueryType::config(),
+            Type\CustomItemQueryType::config(),
+            Type\CustomItemsQueryType::config(),
         ];
 
         foreach ($query as $args) {
