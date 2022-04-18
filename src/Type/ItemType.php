@@ -109,10 +109,10 @@ class ItemType
                     ],
                 ],
 
-                'image_credit' => [
+                'image_credits' => [
                     'type' => 'String',
                     'metadata' => [
-                        'label' => trans('Image Credit'),
+                        'label' => trans('Image Credits'),
                         'filters' => ['limit'],
                     ],
                 ],
