@@ -12,8 +12,7 @@ class TemplateListener
     public static function matchTemplate(Document $document, $view)
     {
         if (static::isView($view, 'item')) {
-
-            $item = $view->item;
+            $item = $view->get('item');
 
             return [
                 'type' => 'com_k2.item',
@@ -24,73 +23,84 @@ class TemplateListener
                 ],
                 'params' => [
                     'item' => $item,
-                    // 'pagination' => function () use ($item) {
-                    //     $element = $item->getElement('_itemprevnext');
-
-                    //     if ($element && $links = $element->getValue()) {
-                    //         return [
-                    //             'previous' => $links['prev_link'] ? new PaginationObject(Text::_('JPREV'), '', null, $links['prev_link']) : null,
-                    //             'next' => $links['next_link'] ? new PaginationObject(Text::_('JNEXT'), '', null, $links['next_link']) : null,
-                    //         ];
-                    //     }
-                    // },
                 ],
                 // 'editUrl' => $item->canEdit()
                 //     ? $item->app->route->submission($view->application->getItemEditSubmission(), $item->type, null, $item->id, 'itemedit')
                 //     : null,
             ];
-
         }
 
-        if (static::isView($view, 'category', 'itemlist') && !isset($view->category)) {
-
-            return [
-                'type' => 'com_k2.items',
-                'query' => [
-                ],
-                'params' => [
-                    'items' => array_merge($view->get('leading'), $view->get('primary'), $view->get('secondary'))
-                ]
-            ];
-        }
-
-        if (static::isView($view, 'category', 'itemlist') && isset($view->category)) {
-
-            $category = $view->category;
+        if (static::isView($view, 'category', 'itemlist')) {
+            $pagination = $view->get('pagination');
+            $categories = array_filter(array_map(function ($cat) {
+                return K2Helper::getCategory($cat);
+            }, $view->get('params')->get('categories', [])));
 
             return [
                 'type' => 'com_k2.category',
                 'query' => [
+                    'catid' => array_map(function($cat) {
+                        return $cat->id;
+                    }, $categories),
+                    'pages' => $pagination->pagesCurrent === 1 ? 'first' : 'except_first',
+                    'lang' => $document->language,
                 ],
                 'params' => [
-                    'category' => $category,
-                    'items' => array_merge($view->get('leading'), $view->get('primary'), $view->get('secondary'))
+                    'categories' => $categories,
+                    'items' => array_merge($view->get('leading'), $view->get('primary'), $view->get('secondary'), $view->get('links'))
+                ]
+            ];
+        }
+
+        if (static::isView($view, 'latest') && $view->get('source') === 'categories') {
+            $categories = $view->get('blocks');
+
+            return [
+                'type' => 'com_k2.category.latest',
+                'query' => [
+                    'catid' => array_map(function($cat) {
+                        return $cat->id;
+                    }, $categories),
+                    'lang' => $document->language,
+                ],
+                'params' => [
+                    'categories' => $categories,
+                    'items' => array_reduce($categories, function($res, $cat) {
+                        return array_merge($res, $cat->items);
+                    }, [])
                 ]
             ];
         }
 
         if (static::isView($view, 'tag', 'itemlist')) {
+            $pagination = $view->get('pagination');
 
             return [
                 'type' => 'com_k2.tag',
                 'query' => [
+                    'pages' => $pagination->pagesCurrent === 1 ? 'first' : 'except_first',
+                    'lang' => $document->language,
                 ],
                 'params' => [
                     'tag' => $view,
-                    'items' => $view->items
-                ]
+                    'items' => $view->get('items'),
+                    'pagination' => $pagination,
+                ],
             ];
         }
 
-        if (static::isView($view, 'latest')) {
+        if (static::isView($view, 'latest') && $view->get('source') === 'users') {
+            $users = $view->get('blocks');
 
             return [
-                'type' => 'com_k2.items',
+                'type' => 'com_k2.item.latest',
                 'query' => [
+                    'lang' => $document->language,
                 ],
                 'params' => [
-                    'items' => array_reduce($view->blocks, function($res, $obj) {
-                        return array_merge($res, $obj->items);
+                    'users' => $users,
+                    'items' => array_reduce($users, function($res, $user) {
+                        return array_merge($res, $user->items);
                     }, [])
                 ]
             ];
@@ -147,19 +157,90 @@ class TemplateListener
                 ],
             ],
 
-            'com_k2.items' => [
-                'label' => 'Items',
-                'group' => 'K2'
+            'com_k2.category' => [
+                'label' => trans('Category Items'),
+                'group' => 'K2',
+                'fieldset' => [
+                    'default' => [
+                        'fields' => [
+                            'catid' =>
+                                [
+                                    'label' => trans('Limit by Categories'),
+                                    'description' => trans(
+                                        'The template is only assigned to the selected categories. Child categories are not included. Use the <kbd>shift</kbd> or <kbd>ctrl/cmd</kbd> key to select multiple categories.'
+                                    ),
+                                ] + $category,
+                            'pages' => [
+                                'label' => trans('Limit by Page Number'),
+                                'description' => trans(
+                                    'The template is only assigned to the selected pages.'
+                                ),
+                                'type' => 'select',
+                                'options' => [
+                                    trans('All pages') => '',
+                                    trans('First page') => 'first',
+                                    trans('All except first page') => 'except_first',
+                                ],
+                            ],
+                            'lang' => $languageField,
+                        ],
+                    ],
+                ],
             ],
 
-            'com_k2.category' => [
-                'label' => 'Category',
-                'group' => 'K2'
+            'com_k2.category.latest' => [
+                'label' => trans('Category Latest Items'),
+                'group' => 'K2',
+                'fieldset' => [
+                    'default' => [
+                        'fields' => [
+                            'catid' =>
+                                [
+                                    'label' => trans('Limit by Categories'),
+                                    'description' => trans(
+                                        'The template is only assigned to the selected categories. Child categories are not included. Use the <kbd>shift</kbd> or <kbd>ctrl/cmd</kbd> key to select multiple categories.'
+                                    ),
+                                ] + $category,
+                            'lang' => $languageField,
+                        ],
+                    ],
+                ],
             ],
 
             'com_k2.tag' => [
-                'label' => 'Tag',
-                'group' => 'K2'
+                'label' => trans('Tagged Items'),
+                'group' => 'K2',
+                'fieldset' => [
+                    'default' => [
+                        'fields' => [
+                            'pages' => [
+                                'label' => trans('Limit by Page Number'),
+                                'description' => trans(
+                                    'The template is only assigned to the selected pages.'
+                                ),
+                                'type' => 'select',
+                                'options' => [
+                                    trans('All pages') => '',
+                                    trans('First page') => 'first',
+                                    trans('All except first page') => 'except_first',
+                                ],
+                            ],
+                            'lang' => $languageField,
+                        ],
+                    ],
+                ],
+            ],
+
+            'com_k2.item.latest' => [
+                'label' => trans('Latest Items'),
+                'group' => 'K2',
+                'fieldset' => [
+                    'default' => [
+                        'fields' => [
+                            'lang' => $languageField,
+                        ],
+                    ],
+                ],
             ],
 
         ];

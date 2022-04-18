@@ -19,9 +19,10 @@ class SourceListener
 
         $query = [
             Type\TagQueryType::config(),
-            Type\CategoryQueryType::config(),
             Type\ItemQueryType::config(),
             Type\ItemsQueryType::config(),
+            Type\AuthorsQueryType::config(),
+            Type\CategoriesQueryType::config(),
         ];
 
         foreach ($query as $args) {

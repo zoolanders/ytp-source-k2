@@ -17,20 +17,12 @@ class TagType
                         'filters' => ['limit'],
                     ],
                 ],
-
                 'link' => [
                     'type' => 'String',
                     'metadata' => [
                         'label' => trans('Link'),
                     ]
                 ],
-
-                // 'id' => [
-                //     'type' => 'Int',
-                //     'metadata' => [
-                //         'label' => trans('ID')
-                //     ]
-                // ],
             ],
 
             'metadata' => [

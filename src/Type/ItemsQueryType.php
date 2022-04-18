@@ -24,7 +24,7 @@ class ItemsQueryType
                     ],
                     'metadata' => [
                         'label' => 'K2 ' . trans('Items'),
-                        'view' => ['com_k2.category', 'com_k2.tag', 'com_k2.items'],
+                        'view' => ['com_k2.category', 'com_k2.category.latest', 'com_k2.item.latest', 'com_k2.tag'],
                         'group' => 'Page',
                         'fields' => [
                             '_offset' => [

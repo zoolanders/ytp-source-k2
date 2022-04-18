@@ -4,17 +4,19 @@ namespace YOOtheme\Source\K2\Type;
 
 use function YOOtheme\trans;
 
-class CategoryQueryType
+class CategoriesQueryType
 {
     public static function config(): array
     {
         return [
             'fields' => [
-                'k2Category' => [
-                    'type' => 'K2Category',
+                'k2Categories' => [
+                    'type' => [
+                        'listOf' => 'K2Category',
+                    ],
                     'metadata' => [
-                        'label' => 'K2 ' . trans('Category'),
-                        'view' => ['com_k2.category'],
+                        'label' => 'K2 ' . trans('Categories'),
+                        'view' => ['com_k2.category', 'com_k2.category.latest'],
                         'group' => 'Page',
                     ],
                     'extensions' => [
@@ -27,8 +29,8 @@ class CategoryQueryType
 
     public static function resolve($root)
     {
-        if (isset($root['category'])) {
-            return $root['category'];
+        if (isset($root['categories'])) {
+            return $root['categories'];
         }
     }
 }
