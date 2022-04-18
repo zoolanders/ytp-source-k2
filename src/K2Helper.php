@@ -79,7 +79,7 @@ class K2Helper
         return $field;
     }
 
-    protected static function processExtraField (&$field)
+    protected static function processExtraField(&$field)
     {
         $field->value = (object) (json_decode($field->value, true)[0] ?? []);
         $field->alias = $field->value->alias;
