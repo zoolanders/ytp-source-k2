@@ -142,7 +142,7 @@ class ItemType
                     ],
                 ],
 
-                'Featured' => [
+                'featured' => [
                     'type' => 'Boolean',
                     'metadata' => [
                         'label' => trans('Featured')
@@ -553,7 +553,7 @@ class ItemType
         $size = $args['size'] ?? '';
 
         if (!$size) {
-            $ext = File::getExtension($item->image);
+            $ext = File::getExtension($item->imageGeneric);
             $image = $item->imageProperties->filenamePrefix;
 
             return "/media/k2/items/src/$image.$ext";
