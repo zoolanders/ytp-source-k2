@@ -119,6 +119,29 @@ class ItemType
                     ],
                 ],
 
+                'video' => [
+                    'type' => 'String',
+                    'metadata' => [
+                        'label' => trans('Media'),
+                    ],
+                ],
+
+                'video_caption' => [
+                    'type' => 'String',
+                    'metadata' => [
+                        'label' => trans('Media Caption'),
+                        'filters' => ['limit'],
+                    ],
+                ],
+
+                'video_credits' => [
+                    'type' => 'String',
+                    'metadata' => [
+                        'label' => trans('Media Credits'),
+                        'filters' => ['limit'],
+                    ],
+                ],
+
                 'Featured' => [
                     'type' => 'Boolean',
                     'metadata' => [
