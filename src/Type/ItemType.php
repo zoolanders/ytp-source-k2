@@ -548,15 +548,18 @@ class ItemType
         );
     }
 
-    public static function imageUrl($item, array $args): string
+    public static function imageUrl($item, array $args): ?string
     {
         $size = $args['size'] ?? '';
+        $hash = md5("Image{$item->id}");
+        $src = "media/k2/items/src/$hash.jpg";
+
+        if (!File::exists($src)) {
+            return null;
+        }
 
         if (!$size) {
-            $ext = File::getExtension($item->imageGeneric);
-            $image = $item->imageProperties->filenamePrefix;
-
-            return "/media/k2/items/src/$image.$ext";
+            return $src;
         }
 
         if ($inherited = $item->params->get($size)) {
@@ -567,6 +570,12 @@ class ItemType
             $size = 'Generic';
         }
 
-        return $item->{"image{$size}"};
+        $cache = "media/k2/items/cache/{$hash}_{$size}.jpg";
+
+        if (File::exists($cache)) {
+            return $cache;
+        }
+
+        return null;
     }
 }
