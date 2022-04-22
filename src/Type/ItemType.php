@@ -584,7 +584,7 @@ class ItemType
 
     public static function resolveMedia($item, array $args): ?string
     {
-        $src = "media/k2/{audio,video}/$item->id.*";
+        $src = "media/k2/{videos,audio}/$item->id.*";
 
         $medias = File::glob($src);
 
@@ -592,6 +592,6 @@ class ItemType
             return array_shift($medias);
         }
 
-        return null;
+        return $item->video;
     }
 }
