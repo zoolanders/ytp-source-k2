@@ -124,6 +124,9 @@ class ItemType
                     'metadata' => [
                         'label' => trans('Media'),
                     ],
+                    'extensions' => [
+                        'call' => __CLASS__ . '::resolveMedia',
+                    ],
                 ],
 
                 'video_caption' => [
@@ -574,6 +577,19 @@ class ItemType
 
         if (File::exists($cache)) {
             return $cache;
+        }
+
+        return null;
+    }
+
+    public static function resolveMedia($item, array $args): ?string
+    {
+        $src = "media/k2/{audio,video}/$item->id.*";
+
+        $medias = File::glob($src);
+
+        if (!empty($medias)) {
+            return array_shift($medias);
         }
 
         return null;
