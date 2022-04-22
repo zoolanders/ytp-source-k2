@@ -90,10 +90,12 @@ class FieldsType
         //     return ['type' => ['listOf' => 'ValueField']] + $config;
         // }
 
+        // dump($config);
+
         return $config;
     }
 
-    protected static function configText($field, array $config)
+    protected static function configTextfield($field, array $config)
     {
         return array_replace_recursive($config, ['metadata' => ['filters' => ['limit']]]);
     }
@@ -108,10 +110,10 @@ class FieldsType
     //     return array_replace_recursive($config, ['metadata' => ['filters' => ['limit']]]);
     // }
 
-    // protected static function configCalendar($field, array $config)
-    // {
-    //     return array_replace_recursive($config, ['metadata' => ['filters' => ['date']]]);
-    // }
+    protected static function configDate($field, array $config)
+    {
+        return array_replace_recursive($config, ['metadata' => ['filters' => ['date']]]);
+    }
 
     // protected static function configUser($field, array $config)
     // {
@@ -258,26 +260,24 @@ class FieldsType
             return;
         }
 
-        return $this->resolveField($field, $item, $field->value->value);
+        return $this->resolveField($field, $item);
     }
 
-    public function resolveField($field, $item, $value)
+    public function resolveField($field, $item)
     {
-        $fieldType = Str::upperFirst($field->type);
+        $fieldType = Str::upperFirst($field->type) . 'Field';
+        $fields = array_combine(array_column((array) $item->extraFields, 'id'), (array) $item->extraFields);
 
         if (is_callable($callback = [$this, "resolve{$fieldType}"])) {
-            return $callback($field);
+            return $callback($field, $fields);
         }
 
-        $field = $this->resolveGenericField($field, $value);
+        $value = $this->resolveGenericField($field, $fields);
 
-        $values = json_decode($item->extra_fields, true);
-        $values = array_combine(array_column($values, 'id'), $values);
-
-        return $values[$field->id]['value'] ?? $field->value->value;
+        return $value ?? $field->value->value;
     }
 
-    public function resolveGenericField($field)
+    public function resolveGenericField($field, $fields)
     {
         // if ($field->fieldparams->exists('multiple')) {
         //     $value = (array) $value;
@@ -291,7 +291,17 @@ class FieldsType
         //     }
         // }
 
-        return $field;
+        return $fields[$field->id]->value ?? $field->value->value;
+    }
+
+    public function resolveImageField($field, $fields)
+    {
+        $value = $fields[$field->id]->value;
+
+        $start = strpos($value, 'src="') + 5;
+        $length = strpos($value, '" alt') - $start;
+
+        return substr($value, $start, $length);
     }
 
     // public function resolveUser($field)
