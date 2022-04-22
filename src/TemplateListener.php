@@ -47,7 +47,8 @@ class TemplateListener
                 ],
                 'params' => [
                     'categories' => $categories,
-                    'items' => array_merge($view->get('leading'), $view->get('primary'), $view->get('secondary'), $view->get('links'))
+                    'items' => array_merge($view->get('leading'), $view->get('primary'), $view->get('secondary'), $view->get('links')),
+                    'pagination' => $pagination,
                 ]
             ];
         }
