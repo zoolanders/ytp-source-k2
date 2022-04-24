@@ -3,6 +3,7 @@
 namespace YOOtheme\Source\K2\Type;
 
 use function YOOtheme\app;
+use function YOOtheme\trans;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\PluginHelper;
@@ -35,7 +36,7 @@ class FieldsType
                                 $field,
                                 [
                                     'type' => 'String',
-                                    'name' => Str::camelCase($field->name),
+                                    'name' => Str::camelCase($field->alias),
                                     'metadata' => [
                                         'label' => $field->name,
                                         'group' => $group->name,
@@ -75,10 +76,10 @@ class FieldsType
             ? $callback($field, $config, $source, $type)
             : static::configGenericField($field, $config);
 
-        $fields[$field->alias] = $config;
+        $fields[$field->name] = $config;
 
         if (is_callable($callback = [__CLASS__, "config{$fieldType}String"])) {
-            $fields[$field->alias . 'String'] = $callback($field, $config, $type);
+            $fields[$field->name . 'String'] = $callback($field, $config, $type);
         }
 
         return $fields;
@@ -113,6 +114,31 @@ class FieldsType
     protected static function configDate($field, array $config)
     {
         return array_replace_recursive($config, ['metadata' => ['filters' => ['date']]]);
+    }
+
+    protected static function configLink($field, array $config)
+    {
+        return array_replace_recursive($config, [
+            'args' => [
+                'value' => [
+                    'type' => 'String',
+                ],
+            ],
+            'metadata' => [
+                'arguments' => [
+                    'value' => [
+                        'label' => trans('Value'),
+                        'description' => trans('Choose the value that should be mapped.'),
+                        'type' => 'select',
+                        'default' => 'url',
+                        'options' => [
+                            'Url' => 'url',
+                            'Text' => 'text'
+                        ]
+                    ],
+                ]
+            ]
+        ]);
     }
 
     // protected static function configUser($field, array $config)
@@ -260,24 +286,27 @@ class FieldsType
             return;
         }
 
-        return $this->resolveField($field, $item);
+        return $this->resolveField($field, $item, $args);
     }
 
-    public function resolveField($field, $item)
+    public function resolveField($field, $item, array $args)
     {
+        // dump($item);
         $fieldType = Str::upperFirst($field->type) . 'Field';
         $fields = array_combine(array_column((array) $item->extraFields, 'id'), (array) $item->extraFields);
 
+        // dump($fields);
+
         if (is_callable($callback = [$this, "resolve{$fieldType}"])) {
-            return $callback($field, $fields);
+            return $callback($field, $fields, $args);
         }
 
-        $value = $this->resolveGenericField($field, $fields);
+        $value = $this->resolveGenericField($field, $fields, $args);
 
         return $value ?? $field->value->value;
     }
 
-    public function resolveGenericField($field, $fields)
+    public function resolveGenericField($field, $fields, array $args)
     {
         // if ($field->fieldparams->exists('multiple')) {
         //     $value = (array) $value;
@@ -294,7 +323,7 @@ class FieldsType
         return $fields[$field->id]->value ?? $field->value->value;
     }
 
-    public function resolveImageField($field, $fields)
+    public function resolveImageField($field, $fields, array $args)
     {
         $value = $fields[$field->id]->value;
 
@@ -304,10 +333,12 @@ class FieldsType
         return substr($value, $start, $length);
     }
 
-    // public function resolveUser($field)
-    // {
-    //     return Factory::getUser($field->rawvalue);
-    // }
+    public function resolveLinkField($field, $fields, array $args)
+    {
+        $value = $fields[$field->id];
+
+        return $value->{$args['value'] ?? 'url'} ?? '';
+    }
 
     // public function resolveArticles($field)
     // {
