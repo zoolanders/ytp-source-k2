@@ -433,18 +433,6 @@ class ItemType
 
     public static function content($item): string
     {
-        // if (
-        //     !$item->params->get('access-view') &&
-        //     $item->params->get('show_noauth') &&
-        //     Factory::getUser()->get('guest')
-        // ) {
-        //     return $item->introtext;
-        // }
-
-        // if (isset($item->text)) {
-        //     return (!empty($item->toc) ? $item->toc : '') . $item->text;
-        // }
-
         if ($item->params->get('itemIntroText', '1') === '1') {
             return "{$item->introtext} {$item->fulltext}";
         }
@@ -458,16 +446,6 @@ class ItemType
 
     public static function teaser($item, $args): string
     {
-        // $args += ['show_excerpt' => true];
-
-        // if (
-        //     $args['show_excerpt'] &&
-        //     // ($field = FieldsType::getField('excerpt', $item, 'com_k2.item')) &&
-        //     Str::length($field->rawvalue)
-        // ) {
-        //     return $field->rawvalue;
-        // }
-
         return $item->introtext;
     }
 
