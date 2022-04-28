@@ -176,6 +176,13 @@ class CustomItemsQueryType
             unset($args['order_timerange']);
         }
 
-        return K2Helper::getModalItems($args);
+        $items = K2Helper::getModalItems($args);
+
+        // resolve categories
+        foreach ($items as $item) {
+            $item->category = K2Helper::getCategory($item->categoryid);
+        }
+
+        return $items;
     }
 }

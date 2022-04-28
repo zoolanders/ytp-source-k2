@@ -56,6 +56,11 @@ class CustomItemQueryType
             $items = CustomItemsQueryType::resolve($root, $args);
         }
 
-        return is_array($items) ? array_shift($items) : null;
+        $item = array_shift($items);
+
+        // resolve category
+        $item->category = K2Helper::getCategory($item->categoryid);
+
+        return $item;
     }
 }
