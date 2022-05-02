@@ -21,10 +21,11 @@ app()->load(__DIR__ . '/modules/*/bootstrap.php');
 return [];
 ```
 
-## Roadmap
+## Requirements
 
- - [x] Item/s, Category/s, Tag `basic` Types and Page Queries.
- - [ ] Custom Item/s, Category/s, Queries.
- - [x] Templates.
- - [ ] Item Extra Fields (partially done).
- - [ ] Content Events Fields.
+- YOOtheme Pro 2.7+
+- K2 2.11 (dev build)
+
+## Mentions
+
+Developed and maintained by [ZOOlanders](www.zoolanders.com), this project would not have been possible without the collaboration of [JoomlaWorks](www.joomlaworks.net) and sponsorship from Philippe Marty (Atelier 51). 
