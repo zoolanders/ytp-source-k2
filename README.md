@@ -1,6 +1,6 @@
 # K2 Source for YOOtheme Pro
 
-A YOOtheme Pro Source for Joomla Component [K2](https://github.com/getk2/k2).
+A YOOtheme Pro Source for Joomla Component [K2](https://github.com/getk2/k2) with Views Templating support.
 
 ## Getting Started
 
