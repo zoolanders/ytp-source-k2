@@ -18,7 +18,7 @@ class TemplateListener
                 'type' => 'com_k2.item',
                 'query' => [
                     'catid' => $item->category->id,
-                    'tag' => array_column($item->tags, 'id'),
+                    'tag' => array_column($item->tags ?? [], 'id'),
                     'lang' => $document->language,
                 ],
                 'params' => [
