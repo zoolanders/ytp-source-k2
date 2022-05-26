@@ -407,6 +407,16 @@ class ItemType
                     ],
                 ],
 
+                'comments_count' => [
+                    'type' => 'String',
+                    'metadata' => [
+                        'label' => trans('Comments Count'),
+                    ],
+                    'extensions' => [
+                        'call' => __CLASS__ . '::commentsCount',
+                    ],
+                ],
+
                 'attachments' => [
                     'type' => [
                         'listOf' => 'K2ItemAttachment',
@@ -494,6 +504,13 @@ class ItemType
         }
 
         return 0;
+    }
+
+    public static function commentsCount($item, $args): int
+    {
+        $model = new \K2ModelItem();
+
+        return $model->countItemComments($item->id);
     }
 
     public static function event($item)
