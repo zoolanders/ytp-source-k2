@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/src/K2Helper.php';
+require_once __DIR__ . '/src/K2ItemsHelper.php';
 require_once __DIR__ . '/src/SourceListener.php';
 require_once __DIR__ . '/src/TemplateListener.php';
 require_once __DIR__ . '/src/Type/TagType.php';

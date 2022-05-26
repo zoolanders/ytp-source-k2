@@ -109,12 +109,8 @@ class K2Helper
         return (new \K2ModelCategories())->categoriesTree();
     }
 
-    public static function getModalItems($params): ?array
+    public static function parseParams($params): object
     {
-        require_once JPATH_SITE.'/modules/mod_k2_content/helper.php';
-
-        $params = new Registry($params);
-
-        return \modK2ContentHelper::getItems($params);
+        return is_string($params) ? new Registry($params) : $params;
     }
 }

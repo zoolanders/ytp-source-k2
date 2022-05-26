@@ -7,6 +7,7 @@ use function YOOtheme\trans;
 use Joomla\CMS\Factory;
 use YOOtheme\File;
 use YOOtheme\Path;
+use YOOtheme\Source\K2\K2Helper;
 use YOOtheme\View;
 
 class ItemType
@@ -443,7 +444,9 @@ class ItemType
 
     public static function content($item): string
     {
-        if ($item->params->get('itemIntroText', '1') === '1') {
+        $params = K2Helper::parseParams($item->params);
+
+        if ($params->get('itemIntroText', '1') === '1') {
             return "{$item->introtext} {$item->fulltext}";
         }
 
@@ -560,7 +563,9 @@ class ItemType
             return $src;
         }
 
-        if ($inherited = $item->params->get($size)) {
+        $params = K2Helper::parseParams($item->params);
+
+        if ($inherited = $params->get($size)) {
             $size = $inherited;
         }
 

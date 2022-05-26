@@ -4,6 +4,7 @@ namespace YOOtheme\Source\K2\Type;
 
 use function YOOtheme\trans;
 use YOOtheme\Source\K2\K2Helper;
+use YOOtheme\Source\K2\K2ItemsHelper;
 
 class CustomItemsQueryType
 {
@@ -176,7 +177,7 @@ class CustomItemsQueryType
             unset($args['order_timerange']);
         }
 
-        $items = K2Helper::getModalItems($args);
+        $items = K2ItemsHelper::getItems($args);
 
         // resolve categories
         foreach ($items as $item) {
