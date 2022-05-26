@@ -44,6 +44,9 @@ class CustomItemsQueryType
                         'order_timerange' => [
                             'type' => 'String',
                         ],
+                        'offset' => [
+                            'type' => 'Int',
+                        ],
                         'limit' => [
                             'type' => 'Int',
                         ],
@@ -88,28 +91,21 @@ class CustomItemsQueryType
                                 'type' => 'checkbox',
                                 'text' => trans('Load featured articles only'),
                             ],
-                            '_order_limit' => [
+                            '_offset_limit' => [
+                                'description' => trans(
+                                    'Set the starting point and limit the number of articles.'
+                                ),
                                 'type' => 'grid',
                                 'width' => '1-2',
                                 'fields' => [
-                                    'order' => [
-                                        'label' => trans('Order'),
-                                        'type' => 'select',
-                                        'default' => '',
-                                        'options' => [
-                                            'Default' => '',
-                                            'Oldest first (by date created)' => 'date',
-                                            'Most recent first (by date created)' => 'rdate',
-                                            'Most recent first (by date published)' => 'publishUp',
-                                            'Title Alphabetical' => 'alpha',
-                                            'Title Reverse-Alphabetical' => 'ralpha',
-                                            'Ordering' => 'order',
-                                            'Ordering reverse' => 'rorder',
-                                            'Most popular' => 'hits',
-                                            'Highest rated' => 'best',
-                                            'Most commented' => 'comments',
-                                            'Latest modified' => 'modified',
-                                            'Random ordering' => 'rand',
+                                    'offset' => [
+                                        'label' => trans('Start'),
+                                        'type' => 'number',
+                                        'default' => 0,
+                                        'modifier' => 1,
+                                        'attrs' => [
+                                            'min' => 1,
+                                            'required' => true,
                                         ],
                                     ],
                                     'limit' => [
@@ -120,6 +116,26 @@ class CustomItemsQueryType
                                             'min' => 1,
                                         ],
                                     ],
+                                ],
+                            ],
+                            'order' => [
+                                'label' => trans('Order'),
+                                'type' => 'select',
+                                'default' => '',
+                                'options' => [
+                                    'Default' => '',
+                                    'Oldest first (by date created)' => 'date',
+                                    'Most recent first (by date created)' => 'rdate',
+                                    'Most recent first (by date published)' => 'publishUp',
+                                    'Title Alphabetical' => 'alpha',
+                                    'Title Reverse-Alphabetical' => 'ralpha',
+                                    'Ordering' => 'order',
+                                    'Ordering reverse' => 'rorder',
+                                    'Most popular' => 'hits',
+                                    'Highest rated' => 'best',
+                                    'Most commented' => 'comments',
+                                    'Latest modified' => 'modified',
+                                    'Random ordering' => 'rand',
                                 ],
                             ],
                             'order_timerange' => [
@@ -170,6 +186,11 @@ class CustomItemsQueryType
         if (!empty($args['limit'])) {
             $args += ['itemCount' => $args['limit']];
             unset($args['limit']);
+        }
+
+        if (!empty($args['offset'])) {
+            $args += ['limitstart' => $args['offset']];
+            unset($args['offset']);
         }
 
         if (!empty($args['order_timerange'])) {
