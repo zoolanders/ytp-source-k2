@@ -97,9 +97,13 @@ class K2Helper
 
     public static function getTags()
     {
-        require_once JPATH_SITE.'/administrator/components/com_k2/models/tags.php';
+        $db = Factory::getDbo();
 
-        return (new \K2ModelTags())->getData();
+        $query = "SELECT #__k2_tags.*, (SELECT COUNT(*) FROM #__k2_tags_xref WHERE #__k2_tags_xref.tagID = #__k2_tags.id) AS numOfItems FROM #__k2_tags ORDER BY name";
+
+        $db->setQuery($query);
+
+        return $db->loadObjectList();
     }
 
     public static function getCategoriesTree()
