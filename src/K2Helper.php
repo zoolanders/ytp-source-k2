@@ -7,9 +7,6 @@ use Joomla\CMS\Table\Table;
 use Joomla\Registry\Registry;
 use YOOtheme\Path;
 
-require_once JPATH_SITE.'/administrator/components/com_k2/models/extrafield.php';
-require_once JPATH_SITE.'/administrator/components/com_k2/models/extrafields.php';
-
 class K2Helper
 {
     public static function getCategory(int $categoryId)
@@ -32,14 +29,14 @@ class K2Helper
 
     public static function getExtraFieldsGroups(): array
     {
-        $fieldsModel = new \K2ModelExtraFields();
+        $fieldsModel = self::loadK2ModelExtraFields();
 
         return $fieldsModel->getGroups();
     }
 
     public static function getExtraFieldsByGroup(int $groupId): array
     {
-        $fieldModel = new \K2ModelExtraField();
+        $fieldModel = self::loadK2ModelExtraField();
 
         $fields = $fieldModel->getExtraFieldsByGroup($groupId);
 
@@ -71,7 +68,7 @@ class K2Helper
 
     public static function getExtraFieldInfo(int $fieldId)
     {
-        $model = new \K2ModelExtraField();
+        $model = self::loadK2ModelExtraField();
 
         $field = $model->getExtraFieldInfo($fieldId);
 
@@ -116,5 +113,19 @@ class K2Helper
     public static function parseParams($params): object
     {
         return is_string($params) ? new Registry($params) : $params;
+    }
+
+    protected static function loadK2ModelExtraField()
+    {
+        require_once JPATH_SITE.'/administrator/components/com_k2/models/extrafield.php';
+
+        return new \K2ModelExtraField();
+    }
+
+    protected static function loadK2ModelExtraFields()
+    {
+        require_once JPATH_SITE.'/administrator/components/com_k2/models/extrafields.php';
+
+        return new \K2ModelExtraFields();
     }
 }

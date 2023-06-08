@@ -60,7 +60,7 @@ class CustomItemsQueryType
                                 'label' => trans('Filter by Categories'),
                                 'type' => 'select',
                                 'default' => [],
-                                'options' => [['evaluate' => 'config.k2categories']],
+                                'options' => [['evaluate' => 'yootheme.builder["com_k2.categories"]']],
                                 'attrs' => [
                                     'multiple' => true,
                                     'class' => 'uk-height-small',
@@ -70,22 +70,22 @@ class CustomItemsQueryType
                                 'label' => trans('Filter by Tags'),
                                 'type' => 'select',
                                 'default' => [],
-                                'options' => [['evaluate' => 'config.k2tags']],
+                                'options' => [['evaluate' => 'yootheme.builder["com_k2.tags"]']],
                                 'attrs' => [
                                     'multiple' => true,
                                     'class' => 'uk-height-small',
                                 ],
                             ],
-                            'users' => [
-                                'label' => trans('Filter by Users'),
-                                'type' => 'select',
-                                'default' => [],
-                                'options' => [['evaluate' => 'config.users']],
-                                'attrs' => [
-                                    'multiple' => true,
-                                    'class' => 'uk-height-small',
-                                ],
-                            ],
+                            // 'users' => [
+                            //     'label' => trans('Filter by Users'),
+                            //     'type' => 'select',
+                            //     'default' => [],
+                            //     'options' => [['evaluate' => 'yootheme.users']],
+                            //     'attrs' => [
+                            //         'multiple' => true,
+                            //         'class' => 'uk-height-small',
+                            //     ],
+                            // ],
                             'featured' => [
                                 'label' => trans('Limit by Featured Articles'),
                                 'type' => 'checkbox',

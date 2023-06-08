@@ -1,13 +1,19 @@
 <?php
 
-namespace YOOtheme\Source\K2;
+namespace YOOtheme\Source\K2\Listener;
 
 use function YOOtheme\trans;
+use YOOtheme\Builder\Source;
+use YOOtheme\Source\K2\Type;
+use YOOtheme\Source\K2\K2Helper;
 use Joomla\CMS\Component\ComponentHelper;
 
-class SourceListener
+class LoadSourceTypes
 {
-    public static function initSource($source)
+    /**
+     * @param Source $source
+     */
+    public function handle($source): void
     {
         $types = [
             ['K2Tag', Type\TagType::config()],

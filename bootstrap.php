@@ -1,9 +1,14 @@
 <?php
 
+namespace YOOtheme\Source\K2;
+
 require_once __DIR__ . '/src/K2Helper.php';
 require_once __DIR__ . '/src/K2ItemsHelper.php';
-require_once __DIR__ . '/src/SourceListener.php';
-require_once __DIR__ . '/src/TemplateListener.php';
+
+require_once __DIR__ . '/src/Listener/LoadBuilderConfig.php';
+require_once __DIR__ . '/src/Listener/LoadSourceTypes.php';
+require_once __DIR__ . '/src/Listener/MatchTemplate.php';
+
 require_once __DIR__ . '/src/Type/TagType.php';
 require_once __DIR__ . '/src/Type/EventType.php';
 require_once __DIR__ . '/src/Type/ItemType.php';
@@ -21,25 +26,14 @@ require_once __DIR__ . '/src/Type/GalleryItemType.php';
 require_once __DIR__ . '/src/Type/CustomItemQueryType.php';
 require_once __DIR__ . '/src/Type/CustomItemsQueryType.php';
 
+use YOOtheme\Builder\BuilderConfig;
+
 return [
 
     'events' => [
-
-        'builder.template' => [
-            \YOOtheme\Source\K2\TemplateListener::class => 'matchTemplate',
-        ],
-
-        'customizer.init' => [
-            \YOOtheme\Source\K2\TemplateListener::class => [
-                ['initCustomizer'],
-            ],
-        ],
-
-        'source.init' => [
-            \YOOtheme\Source\K2\SourceListener::class => 'initSource',
-        ],
-
+        'source.init' => [Listener\LoadSourceTypes::class => '@handle'],
+        'builder.template' => [Listener\MatchTemplate::class => '@handle'],
+        BuilderConfig::class => [Listener\LoadBuilderConfig::class => '@handle'],
     ]
-
 
 ];
