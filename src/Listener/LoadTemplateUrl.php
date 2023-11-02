@@ -16,7 +16,6 @@ class LoadTemplateUrl
 
         switch ($view) {
             case 'item':
-                $catid = $template['query']['catid'] ?? [];
                 $items = K2ItemsHelper::getItems([
                     'limit' => 1
                 ]);
