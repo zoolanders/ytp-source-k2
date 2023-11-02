@@ -2,9 +2,9 @@
 
 namespace YOOtheme\Source\K2;
 
-use Joomla\CMS\Component\ComponentHelper;
+// use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Plugin\PluginHelper;
+// use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\Registry\Registry;
 
 require_once(JPATH_SITE.'/components/com_k2/helpers/route.php');
@@ -12,7 +12,7 @@ require_once(JPATH_SITE.'/components/com_k2/helpers/utilities.php');
 
 class K2ItemsHelper
 {
-    public static function getItems($params)
+    public static function getItems(array $params)
     {
         $params = new Registry($params);
 
@@ -40,7 +40,7 @@ class K2ItemsHelper
 
         // Get language on Joomla 2.5+
         $languageFilter = '';
-        if (K2_JVERSION != '15') {
+        if (K2_JVERSION != '15' && method_exists($app, 'getLanguageFilter')) {
             if ($app->getLanguageFilter()) {
                 $languageTag = Factory::getLanguage()->getTag();
                 $languageFilter = $db->Quote($languageTag).", ".$db->Quote('*');

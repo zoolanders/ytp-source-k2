@@ -7,6 +7,7 @@ require_once __DIR__ . '/src/K2ItemsHelper.php';
 
 require_once __DIR__ . '/src/Listener/LoadBuilderConfig.php';
 require_once __DIR__ . '/src/Listener/LoadSourceTypes.php';
+require_once __DIR__ . '/src/Listener/LoadTemplateUrl.php';
 require_once __DIR__ . '/src/Listener/MatchTemplate.php';
 
 require_once __DIR__ . '/src/Type/TagType.php';
@@ -33,6 +34,7 @@ return [
     'events' => [
         'source.init' => [Listener\LoadSourceTypes::class => '@handle'],
         'builder.template' => [Listener\MatchTemplate::class => '@handle'],
+        'builder.template.load' => [Listener\LoadTemplateUrl::class => '@handle'],
         BuilderConfig::class => [Listener\LoadBuilderConfig::class => '@handle'],
     ]
 
