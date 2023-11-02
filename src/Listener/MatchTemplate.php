@@ -3,6 +3,7 @@
 namespace YOOtheme\Source\K2\Listener;
 
 use Joomla\CMS\Document\Document;
+use YOOtheme\Source\K2\K2Helper;
 
 class MatchTemplate
 {
