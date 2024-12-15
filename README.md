@@ -30,4 +30,4 @@ return [];
 
 ## Mentions
 
-Developed and maintained by [ZOOlanders](www.zoolanders.com), this project would not have been possible without the collaboration of [JoomlaWorks](www.joomlaworks.net) and sponsorship from Philippe Marty (Atelier 51).
+Developed and maintained by [ZOOlanders](https://www.zoolanders.com), this project would not have been possible without the collaboration of [JoomlaWorks](https://www.joomlaworks.net) and sponsorship from Philippe Marty (Atelier 51).
